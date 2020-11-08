@@ -17,7 +17,7 @@ export class ResultsComponent implements OnInit {
   username = '';
   game = { characters: {} };
   nbCharacters = 0;
-  results = {};
+  results: any = {};
   total = {};
   reducer = (accumulator, currentValue) => accumulator + currentValue;
 
@@ -31,7 +31,8 @@ export class ResultsComponent implements OnInit {
       for (const user of JSON.parse(resp.game).users) {
         this.results[user] = {};
         for (let round = 0; round < 3; round++) {
-          this.results[user][round] = Object.values(JSON.parse(resp.game).characters).filter(x => x.discovered[round] === user).length;
+          this.results[user][round] = Object.values(JSON.parse(resp.game).characters).filter(
+            (x: any) => x.discovered[round] === user).length;
         }
       }
     });
