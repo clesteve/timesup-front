@@ -107,13 +107,14 @@ export class GameComponent implements OnInit, OnDestroy {
 
   getChrono(x, chrono, snackbar) {
     if (chrono.started) {
-      let value = this.initialValue + 60*60*1000 - (new Date().valueOf()) + (new Date(chrono.begin).valueOf());
+      let value = this.initialValue + 60 * 60 * 1000 - (new Date().valueOf()) + (new Date(chrono.begin).valueOf());
       if (value <= 0) {
         chrono.started = false;
         value = this.initialValue;
         snackbar.open('End of chrono time, next player', '', { duration: 1000 });
         this.dataService.nextPlayer(this.gameId).subscribe(res => {
           console.log(res);
+          this.currentPlayer = res.user;
         });
       }
       this.chronovalue = Math.floor(value / 1000);
