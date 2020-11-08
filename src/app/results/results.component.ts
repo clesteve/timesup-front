@@ -15,7 +15,7 @@ export class ResultsComponent implements OnInit {
 
   gameId = '';
   username = '';
-  game = { characters: {} };
+  game: any = { characters: {}, teams: {} };
   nbCharacters = 0;
   results: any = {};
   total = {};
