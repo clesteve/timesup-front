@@ -1,0 +1,25 @@
+<div class='ph5'>
+  <mat-form-field appearance='outline' class='w-100 '>
+    <mat-icon matPrefix class='mr3' color='primary'>person</mat-icon>
+    <mat-label>Username</mat-label>
+    <input matInput [(ngModel)]="username" required>
+  </mat-form-field>
+</div>
+<h2> Join Existing Game</h2>
+<div class='ph5'>
+  <mat-form-field appearance='outline' class='w-100'>
+    <mat-icon matPrefix class='mr3' color='primary'>label</mat-icon>
+    <mat-label>Game ID</mat-label>
+    <input matInput [(ngModel)]="gameId" [disabled]='!username' required>
+  </mat-form-field>
+</div>
+<div class='ph5'>
+<button mat-raised-button color='primary' class='w-100' (click)='getGame()' [disabled]='!gameId || !username'>
+  <mat-icon class='mr3'>share</mat-icon>Join</button>
+</div>
+
+<h2> OR</h2>
+<div class='ph5'>
+<button mat-raised-button color='accent' class='w-100' (click)='createGame()' [disabled]='!username'>
+<mat-icon class='mr3'>add_circle</mat-icon>Create New Game</button>
+</div>

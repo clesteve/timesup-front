@@ -1,0 +1,17 @@
+<div class='tr mr3'><button mat-raised-button color='warn' (click)="quitGame()"><mat-icon>close</mat-icon>Quit Game</button></div>
+
+<b>Game ID : </b> {{gameId}} <br>
+<b>Players : </b>
+<mat-chip-list aria-label="Fish selection">
+  <mat-chip style='color:white;' [ngStyle]="{'background-color': (submitted.includes(user)) ? 'green' : 'orange'}" *ngFor="let user of users" selected>{{user}}</mat-chip>
+</mat-chip-list>
+
+<h1>Characters</h1>
+<mat-form-field appearance='outline' class='w-100' *ngFor='let char of characters; let i=index; trackBy:trackByFn;'>
+  <mat-icon matPrefix class='mr3' color='primary'>person</mat-icon>
+  <mat-label>Character</mat-label>
+  <input matInput [(ngModel)]='characters[i]'>
+</mat-form-field>
+<button mat-raised-button color="accent" (click)='characters.push("")'><mat-icon class='mr3'>add</mat-icon> Add Character</button>
+<span class='ml3'>
+<button mat-raised-button color="primary" (click)='submit()'><mat-icon class='mr3'>send</mat-icon> Submit</button></span>

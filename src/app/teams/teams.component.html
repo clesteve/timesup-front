@@ -1,0 +1,17 @@
+<div class='tr mr3'><button mat-raised-button color='warn' (click)="quitGame()"><mat-icon>close</mat-icon>Quit Game</button></div>
+<b>Game ID : </b> {{gameId}} <br>
+<b>Players : </b>
+<mat-chip-list aria-label="Fish selection">
+  <mat-chip style='color:white;' [ngStyle]="{'background-color': (submitted.includes(user)) ? 'green' : 'orange'}" *ngFor="let user of users" selected>{{user}}</mat-chip>
+</mat-chip-list>
+<br>
+<h1>Teams <button mat-raised-button color="primary" [disabled]='!canGenerateTeams()'
+  (click)='generateTeams()' *ngIf='isAdmin'> Generate Random Teams</button></h1>
+<ul>
+  <li *ngFor='let team of teams'>
+    <mat-chip style='background-color:green; color:white;' *ngFor="let user of team" selected>{{user}}</mat-chip>
+  </li>
+</ul>
+<div *ngIf="isAdmin && teams.length">
+  <button mat-raised-button (click)='startGame()' color="accent" [disabled]='submitted.length < users.length'> Play !</button>
+</div>

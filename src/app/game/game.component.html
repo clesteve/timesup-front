@@ -1,0 +1,39 @@
+<div class='tr mr3'><button mat-raised-button color='warn' (click)="quitGame()"><mat-icon>close</mat-icon>Quit Game</button></div>
+<b>Connected as : </b> {{username}} <br>
+<b>Game ID : </b> {{gameId}} <br>
+<b>Players : </b>
+<mat-chip-list aria-label="Fish selection">
+  <mat-chip style='background-color: green; color:white' *ngFor="let user of users" selected>{{user}}</mat-chip>
+</mat-chip-list>
+<b>Teams</b>
+<ul>
+  <li *ngFor='let team of teams'>
+    <span *ngFor='let user of team' class='mr3'>{{user}}</span>
+  </li>
+</ul>
+<h1>Round {{round + 1}}</h1>
+<b>Current Player : </b> {{users[currentPlayer]}} <br>
+<div class='flex'>
+<div *ngIf="currentlyPlaying() && !chrono.started"> 
+  <p>It's your turn to play, press "Start Chrono" whenever you're ready</p>
+  <button mat-raised-button color='primary' (click)='startChrono()'>Start chrono</button>
+</div>
+<div *ngIf="chrono.started" class='dib'> 
+  <b class='blue'>{{chronovalue}} seconds</b>
+  <mat-progress-spinner color='primary' mode='determinate' [value]='chronovalue * 100/60'></mat-progress-spinner>
+</div>
+<div *ngIf="currentlyPlaying() && character.id && chrono.started" class='dib ml5'>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{character.name}}</mat-card-title>
+    </mat-card-header>
+    <!-- <mat-card-content>
+
+    </mat-card-content> -->
+    <mat-card-actions>
+      <button mat-button (click)='discovered()'>DISCOVERED</button>
+      <button mat-button (click)='pass()'>PASS</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+</div>
