@@ -35,6 +35,7 @@ export class IndexComponent implements OnInit {
   }
 
   createGame() {
+    localStorage.removeItem('gameId');
     this.dataService.createGame(this.username).subscribe(res => {
       localStorage.setItem('username', this.username);
       localStorage.setItem('gameId', res.gameId);

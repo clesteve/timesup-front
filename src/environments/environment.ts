@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  server_url: 'http://localhost:5000/'
+  server_url: 'http://146.148.127.77:5000/'
 };
 
 /*
