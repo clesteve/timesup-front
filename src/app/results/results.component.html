@@ -1,4 +1,37 @@
-<p>
-  {{game | json}}
-</p>
+<div class='flex justify-center w-100'>
+<table rules='rows' style='max-width:90vw'>
+  <thead>
+    <tr>
+      <th></th><th *ngFor="let t of game.teams; index as i" colspan="2">Team {{i}}</th>
+      </tr>
+    <tr><th></th><ng-container *ngFor="let t of game.teams; index as i" > <th> {{t[0]}}</th><th>{{t[1]}}</th></ng-container></tr>
+  </thead>
+<tr>
+  <th>Round 1</th>
+  <ng-container *ngFor="let t of game.teams; index as i" > <td> {{results[t[0]][0]}}</td><td>{{results[t[1]][0]}}</td></ng-container>
+</tr>
+<tr>
+  <th>Round 2</th>
+  <ng-container *ngFor="let t of game.teams; index as i" > <td> {{results[t[0]][1]}}</td><td>{{results[t[1]][1]}}</td></ng-container>
+</tr>
+<tr>
+    <th>Round 3</th>
+    <ng-container *ngFor="let t of game.teams; index as i" > <td> {{results[t[0]][2]}}</td><td>{{results[t[1]][2]}}</td></ng-container>
+</tr>
+<tfoot>
+  <tr><th>Total (individual)</th>
+    <ng-container *ngFor="let t of game.teams; index as i" > 
+      <td> {{results[t[0]][0] + results[t[0]][1] + results[t[0]][2]}}</td>
+      <td>{{results[t[1]][0] + results[t[1]][1] + results[t[1]][2]}}</td>
+    </ng-container>
+  </tr>
+  <tr><th>TOTAL (team)</th>
+    <td *ngFor="let t of game.teams; index as i" colspan="2" class='b'>
+      {{results[t[0]][0] + results[t[0]][1] + results[t[0]][2] + results[t[1]][0] + results[t[1]][1] + results[t[1]][2]}}
+    </td></tr>
+</tfoot>
+</table>
+</div>
+<div class='tr mr3'>
 <button mat-raised-button color="primary" (click)='back()'>Back to Start</button>
+</div>

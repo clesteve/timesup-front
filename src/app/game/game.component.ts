@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import { interval } from 'rxjs';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.sass']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +29,7 @@ export class GameComponent implements OnInit {
   initialValue = 60 * 1000;
   chronovalue = 60;
   character = { id: '' };
+  sse: Subscription;
 
   users = [];
   teams = [];
@@ -55,14 +56,15 @@ export class GameComponent implements OnInit {
       if (parsed.end) {
         this.router.navigate(['results']);
       }
-      if (parsed.users[parsed.current_user] === this.username) {
+      if (parsed.users[parsed.current_user] === localStorage.getItem('username')) {
         this.dataService.getCharacter(this.gameId).subscribe(res => {
           this.character = res.character;
+          console.log(res.character);
         });
       }
       this.subscribe = this.interval.subscribe(x => this.getChrono(x, this.chrono, this.snackbar));
     });
-    this.sseService.getServerSentEvent(url).subscribe(resp => {
+    this.sse = this.sseService.getServerSentEvent(url).subscribe(resp => {
       const parsed = JSON.parse(resp.data);
       console.log(parsed);
       this.users = parsed.users;
@@ -74,9 +76,10 @@ export class GameComponent implements OnInit {
       if (parsed.end) {
         this.router.navigate(['results']);
       }
-      if (parsed.users[parsed.current_user] === this.username) {
+      if ((parsed.users[parsed.current_user] === this.username) && !this.character.id) {
         this.dataService.getCharacter(this.gameId).subscribe(res => {
           this.character = res.character;
+          console.log(res.character);
         });
       }
     });
@@ -126,9 +129,12 @@ export class GameComponent implements OnInit {
 
   discovered() {
     this.dataService.discover(this.gameId, this.username, this.character.id).subscribe(res => {
+      console.log('discovered ! ');
       console.log(res);
       this.character = res.character;
     });
   }
-
+  ngOnDestroy() {
+    this.sse.unsubscribe();
+  }
 }

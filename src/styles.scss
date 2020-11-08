@@ -1,4 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+table,
+td {
+  border: 1px solid white;
+  border-collapse: collapse;
+  text-align: center;
+  padding: 1em 2em 1em 2em;
+}
+
+thead {
+  background-color: #6c7ae0;
+  color: white;
+  text-align: center;
+}

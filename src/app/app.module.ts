@@ -17,6 +17,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 
@@ -49,7 +51,9 @@ import { ResultsComponent } from './results/results.component';
     MatSnackBarModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatCardModule
+    MatCardModule,
+    MatTableModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

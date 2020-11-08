@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DataService } from '../data.service';
 import { SSEService } from '../sse.service';
@@ -10,7 +11,7 @@ import { SSEService } from '../sse.service';
   templateUrl: './teams.component.html',
   styleUrls: ['./teams.component.sass']
 })
-export class TeamsComponent implements OnInit {
+export class TeamsComponent implements OnInit, OnDestroy {
 
   constructor(
     private sseService: SSEService,
@@ -25,6 +26,8 @@ export class TeamsComponent implements OnInit {
   teams = [];
   isAdmin = false;
   submitted = [];
+  admin = '';
+  sse: Subscription;
 
   ngOnInit() {
     this.gameId = localStorage.getItem('gameId');
@@ -37,12 +40,13 @@ export class TeamsComponent implements OnInit {
       this.teams = parsed.teams;
       this.isAdmin = (this.username === parsed.admin);
       this.submitted = parsed.submitted;
+      this.admin = parsed.admin;
       if (parsed.round > -1) {
         this.snackbar.open('Game Started !', '', { duration: 1000 });
         this.router.navigate(['play']);
       }
     });
-    this.sseService.getServerSentEvent(url).subscribe(resp => {
+    this.sse = this.sseService.getServerSentEvent(url).subscribe(resp => {
       const parsed = JSON.parse(resp.data);
       console.log(parsed);
       this.users = parsed.users;
@@ -74,5 +78,10 @@ export class TeamsComponent implements OnInit {
   startGame() {
     this.dataService.nextRound(this.gameId).subscribe(res => { console.log(res); });
   }
+
+  ngOnDestroy() {
+    this.sse.unsubscribe();
+  }
+
 
 }

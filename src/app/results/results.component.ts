@@ -15,19 +15,31 @@ export class ResultsComponent implements OnInit {
 
   gameId = '';
   username = '';
-  game = {};
+  game = { characters: {} };
+  nbCharacters = 0;
+  results = {};
+  total = {};
+  reducer = (accumulator, currentValue) => accumulator + currentValue;
+
 
   ngOnInit() {
     this.gameId = localStorage.getItem('gameId');
     this.username = localStorage.getItem('username');
-    this.dataService.getFullGame(this.gameId).subscribe(resp => {
+    this.dataService.getFullGame(localStorage.getItem('gameId')).subscribe(resp => {
       this.game = JSON.parse(resp.game);
+      this.nbCharacters = Object.keys(JSON.parse(resp.game).characters).length;
+      for (const user of JSON.parse(resp.game).users) {
+        this.results[user] = {};
+        for (let round = 0; round < 3; round++) {
+          this.results[user][round] = Object.values(JSON.parse(resp.game).characters).filter(x => x.discovered[round] === user).length;
+        }
+      }
     });
   }
 
   back() {
+    localStorage.removeItem('gameId');
     this.dataService.quitGame(this.gameId, this.username).subscribe(resp => {
-      localStorage.removeItem('gameId');
       this.router.navigate(['/']);
     });
   }

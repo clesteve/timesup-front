@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { DataService } from '../data.service';
 import { SSEService } from '../sse.service';
@@ -10,7 +11,7 @@ import { SSEService } from '../sse.service';
   templateUrl: './characters.component.html',
   styleUrls: ['./characters.component.sass']
 })
-export class CharactersComponent implements OnInit {
+export class CharactersComponent implements OnInit, OnDestroy {
 
   constructor(
     private dataService: DataService,
@@ -25,6 +26,7 @@ export class CharactersComponent implements OnInit {
   isAdmin = false;
   users = [];
   submitted = [];
+  sse: Subscription;
 
   ngOnInit() {
     this.gameId = localStorage.getItem('gameId');
@@ -36,12 +38,15 @@ export class CharactersComponent implements OnInit {
       this.users = parsed.users;
       this.isAdmin = (this.username === parsed.admin);
       this.submitted = parsed.submitted;
+      if (parsed.submitted.includes(this.username)) {
+        this.router.navigate(['teams']);
+      }
       if (parsed.round > -1) {
         this.snackbar.open('Game Started !', '', { duration: 1000 });
         this.router.navigate(['play']);
       }
     });
-    this.sseService.getServerSentEvent(url).subscribe(resp => {
+    this.sse = this.sseService.getServerSentEvent(url).subscribe(resp => {
       const parsed = JSON.parse(resp.data);
       console.log(parsed);
       this.users = parsed.users;
@@ -50,6 +55,9 @@ export class CharactersComponent implements OnInit {
       if (parsed.round > -1) {
         this.snackbar.open('Game Started !', '', { duration: 1000 });
         this.router.navigate(['play']);
+      }
+      if (parsed.submitted.includes(this.username)) {
+        this.router.navigate(['teams']);
       }
     });
   }
@@ -70,6 +78,10 @@ export class CharactersComponent implements OnInit {
       this.snackbar.open('Disconnected !', '', { duration: 1000 });
       this.router.navigate(['/']);
     });
+  }
+
+  ngOnDestroy() {
+    this.sse.unsubscribe();
   }
 
 }

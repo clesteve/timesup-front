@@ -1,17 +1,32 @@
-<div class='tr mr3'><button mat-raised-button color='warn' (click)="quitGame()"><mat-icon>close</mat-icon>Quit Game</button></div>
+<div class='absolute' style='top:10px; right:10px'><button mat-raised-button color='warn' (click)="quitGame()"><mat-icon>close</mat-icon>Quit</button></div>
+<mat-card>
+  <mat-card-title> Game Infos</mat-card-title>
 <b>Game ID : </b> {{gameId}} <br>
 <b>Players : </b>
-<mat-chip-list aria-label="Fish selection">
-  <mat-chip style='color:white;' [ngStyle]="{'background-color': (submitted.includes(user)) ? 'green' : 'orange'}" *ngFor="let user of users" selected>{{user}}</mat-chip>
+<mat-chip-list aria-label="Fish selection" class='dib'>
+  <mat-chip style='color:white; min-height:20px;' [ngStyle]="{'background-color': (submitted.includes(user)) ? 'green' : 'orange'}" *ngFor="let user of users" selected>{{user}}</mat-chip>
 </mat-chip-list>
-<br>
-<h1>Teams <button mat-raised-button color="primary" [disabled]='!canGenerateTeams()'
-  (click)='generateTeams()' *ngIf='isAdmin'> Generate Random Teams</button></h1>
-<ul>
-  <li *ngFor='let team of teams'>
-    <mat-chip style='background-color:green; color:white;' *ngFor="let user of team" selected>{{user}}</mat-chip>
+</mat-card>
+<mat-card class='mt3'>
+<mat-card-title>Teams <span class='ml4'><button mat-raised-button color="primary" [disabled]='!canGenerateTeams()'
+  (click)='generateTeams()' *ngIf='isAdmin'> Generate Random Teams</button></span></mat-card-title>
+<ul> 
+  <li *ngFor='let team of teams; index as i'>
+    <b>Team {{i}} : </b><mat-chip style='background-color:green; color:white; min-height:20px; margin:5px;' *ngFor="let user of team" selected>{{user}}</mat-chip>
   </li>
 </ul>
+<i *ngIf="isAdmin && !teams.length"> 
+  <mat-icon style='color:grey'>help</mat-icon>
+  As soon as there is an even number of players (with a minimum of 4),
+  click on "Generate Random Teams" to generate teams. <br>
+  When the generated teams suit you, click on "Play" to start the game.
+</i>
+<i *ngIf="!isAdmin && !teams.length"> 
+  <mat-icon style='color:grey'>help</mat-icon>
+  As soon as there is an even number of players (with a minimum of 4),
+  the game admin ({{admin}}) will be able to generate teams, and then start the game.
+</i>
 <div *ngIf="isAdmin && teams.length">
   <button mat-raised-button (click)='startGame()' color="accent" [disabled]='submitted.length < users.length'> Play !</button>
 </div>
+</mat-card>
